@@ -110,9 +110,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+@angular/material/autocomplete
+
 @angular/material/button
 
 @angular/material/card
+
+@angular/material/core
 
 @angular/material/dialog
 
@@ -120,11 +124,18 @@ THE SOFTWARE.
 
 @angular/material/icon
 
+@angular/material/radio
+
 @angular/material/table
 
 @angular/material/toolbar
 
+@angular/material/tooltip
+
 @angular/platform-browser
+MIT
+
+angular-ng-autocomplete
 MIT
 
 core-js
