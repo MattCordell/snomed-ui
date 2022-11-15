@@ -31,6 +31,16 @@ export interface Reaction {
   comment: string;
 }
 
+export interface DiagnosticImagingInvestigation {
+  presentingProblemCode: string;
+  presentingProblemDisplay: string;
+  serviceRequestCode: string;
+  serviceRequestDisplay: string;
+  contrastMaterialCode: string;
+  contrastMaterialDisplay: string;
+  additionalNotes: string;
+}
+
 export interface Vaccination {
   name: string;
   brandName: string;
@@ -44,7 +54,7 @@ export interface Problem {
   date: string;
 }
 
-export interface Investigation {
+export interface PathologyInvestigation {
   test: string;
   date: string;
   result: string;
@@ -73,6 +83,10 @@ export class DemoModelService {
   reactions: Reaction[] = [
     {substanceCode: '764146007', substanceDisplay: 'Penicillin', criticalityCode: '75540009', criticalityDisplay: 'High', manifestations : [{value: '271807003', display: 'Rash'}], verificationStatus: 'confirmed', comment: 'childhood'},
   ];
+
+  diagnosticImagingInvestigations: DiagnosticImagingInvestigation[] = [
+    {presentingProblemCode: '30561011000036101', presentingProblemDisplay: 'Chronic cough', serviceRequestCode: '399208008', serviceRequestDisplay: 'Plain chest X-ray', contrastMaterialCode : '', contrastMaterialDisplay: '', additionalNotes: 'cough since April. Hx of travel SE Asia'},
+  ]
 
   procedures: Procedure[] = [
     {code: '80146002', codeDisplay: 'Appendectomy', date: '2010-06-04'}
@@ -164,6 +178,30 @@ export class DemoModelService {
       comment: cmt}
     )
 
+  }
+
+  getDiagnosticImagingInvestigations() : DiagnosticImagingInvestigation[] {
+
+    return this.diagnosticImagingInvestigations;
+  }
+
+  addDiagnosticImagingInvestigation(
+    presentingProblemCode: string,
+    presentingProblemDisplay: string,
+    serviceRequestCode: string,
+    serviceRequestDisplay: string,
+    contrastMaterialCode: string,
+    contrastMaterialDisplay: string,
+    additionalNotes: string) {
+      
+    this.diagnosticImagingInvestigations.push(
+      {presentingProblemCode: presentingProblemCode, presentingProblemDisplay: presentingProblemDisplay,
+      serviceRequestCode: serviceRequestCode, serviceRequestDisplay: serviceRequestDisplay,
+      contrastMaterialCode: contrastMaterialCode, contrastMaterialDisplay: contrastMaterialDisplay,
+      additionalNotes: additionalNotes
+
+      }
+    )
   }
 
   getProcedures() : Procedure[] {

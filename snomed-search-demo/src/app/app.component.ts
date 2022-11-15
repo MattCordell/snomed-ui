@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ValueSet} from 'fhir-stu3';
-import { MatDialog, MatTable } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
 import { DemoModelService } from './demo-model.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class AppComponent {
 
   @ViewChild('problemTable', {static:true}) problemTable: MatTable<any>;
   @ViewChild('vaccinationTable', {static:true}) vaccinationTable: MatTable<any>;
-  @ViewChild('investigationTable', {static:true}) investigationTable: MatTable<any>;
+  @ViewChild('pathologyInvestigationTable', {static:true}) pathologyInvestigationTable: MatTable<any>;
   @ViewChild('reactionTable',{static:true}) reactionTable: MatTable<any>;
   @ViewChild('medicationTable',{static:true}) medicationTable: MatTable<any>;
   @ViewChild('procedureTable',{static:true}) procedureTable: MatTable<any>;
@@ -25,7 +26,8 @@ export class AppComponent {
 
   terminologyServers: string[] = [
     "https://primarycare.ontoserver.csiro.au/fhir",
-    "https://r4.ontoserver.csiro.au/fhir"
+    "https://r4.ontoserver.csiro.au/fhir",
+    "https://tx.ontoserver.csiro.au/fhir"
   ];
 
   selectedMenuItem = "encounter";
