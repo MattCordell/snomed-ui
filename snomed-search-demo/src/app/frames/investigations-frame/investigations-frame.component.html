@@ -1,0 +1,320 @@
+<div [formGroup]="investigationsForm" class="container" fxLayout="column" fxLayoutGap="20px">
+    
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar><mat-icon>add</mat-icon></div>
+      <mat-card-title>Add New Diagnostic Imaging Request</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Presenting Problem</mat-label>
+          <input type="text" aria-label="Presenting Problem" matInput formControlName="presentingProblem" [matAutocomplete]="autoPresentingProblem">
+          <span matPrefix matTooltip="This field uses SNOMED CT" class="circle"><b>S</b></span>    
+          <mat-autocomplete #autoPresentingProblem="matAutocomplete" [displayWith]="displayFn.bind(this)">
+            <mat-option *ngFor="let option of filteredPresentingProblemValues" [value]="option">
+              {{option.display}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Presenting Problem"
+          [mdePopoverTriggerFor]="presentingProblemPopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+          <b>i</b>
+        </button>
+        <mde-popover #presentingProblemPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 600px">
+            <mat-card-content>
+              Details of why the patient is requiring the diagnostic investigation
+          </mat-card-content>
+          </mat-card>
+        </mde-popover>
+      </div>
+      <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Modality</mat-label>
+          <input type="text" aria-label="Modality" matInput formControlName="modality" [matAutocomplete]="autoModality">
+          <span matPrefix matTooltip="This field uses SNOMED CT" class="circle"><b>S</b></span>    
+          <mat-autocomplete #autoModality="matAutocomplete" [displayWith]="displayFn.bind(this)">
+            <mat-option *ngFor="let option of filteredModalityValues" [value]="option" (click)="onSelectModality(option)">
+              {{option.display}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Modality"
+          [mdePopoverTriggerFor]="modalityPopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+          <b>i</b> 
+        </button>
+        <mde-popover #modalityPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 600px">
+            <mat-card-content>
+              The desired modality of the investigation.
+              The available values here are limited to those in the "Australian Radiology Procedure" value set, developed by RANZCR.
+              Any modality selected here is used to filter the options presented in the "DI Service Request" list below.
+          </mat-card-content>
+          </mat-card>
+        </mde-popover>
+      </div>
+
+      <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Target Site</mat-label>
+          <input type="text" aria-label="Target Site" matInput formControlName="targetSite" [matAutocomplete]="autoTargetSite">
+            <!-- (click)="onClickTargetSite()"> -->
+          <span matPrefix matTooltip="This field uses SNOMED CT" class="circle"><b>S</b></span>    
+          <mat-autocomplete #autoTargetSite="matAutocomplete" [displayWith]="displayFn.bind(this)">
+            <mat-option *ngFor="let option of filteredTargetSiteValues" [value]="option" (click)="onSelectTargetSite(option)">
+              {{option.display}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Target Site"
+          [mdePopoverTriggerFor]="targetSitePopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+          <b>i</b>
+        </button>
+        <mde-popover #targetSitePopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+          <mat-card style="max-width: 600px">
+            <mat-card-content>
+              The focus anatomical site for the diagnostic investigation. 
+              The available values here are limited to those in the "Australian Radiology Service Site" value set, developed by RANZCR.
+              Any target site selected here is used to filter the options presented in the "DI Service Request" list below.
+          </mat-card-content>
+          </mat-card>
+        </mde-popover>
+        <div fxFlex>
+          <span matPrefix matTooltip="This field uses SNOMED CT" class="rb-circle"><b>S</b></span>
+          <label class="mat-typography">Laterality: </label>
+          <mat-radio-group formControlName="side">
+              <mat-radio-button *ngFor="let option of sideValues" [value]="option" matTooltip="SNOMED CT code: {{option.value}}" (click)="onSelectLaterality(option)">
+                  {{option.display}}
+              </mat-radio-button>
+          </mat-radio-group>
+          <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Laterality"
+            [mdePopoverTriggerFor]="sidePopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+            <b>i</b>
+          </button>
+          <mde-popover #sidePopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+            <mat-card style="max-width: 600px">
+              <mat-card-content>
+                Laterality options. These values are hard coded into the UI.
+
+                Any laterality value selected here is used to filter the options presented in the "DI Service Request" list below.
+             </mat-card-content>
+            </mat-card>
+          </mde-popover>
+        </div>
+      </div>
+
+      <mat-grid-list cols="2" rowHeight="580px" gutterSize="20px">
+
+        <mat-grid-tile >
+          <div class="form-row" fxLayout="column" fxLayout.xs="column" fxLayoutGap="0px">
+          <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px" style="display: flex; align-items: flex-start;">
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>DI Service Request</mat-label>
+              <input type="text" aria-label="Diagnostic Imaging Service Request" matInput formControlName="serviceRequest" [matAutocomplete]="autoServiceRequest">
+              <span matPrefix matTooltip="This field uses SNOMED CT" class="circle"><b>S</b></span>    
+              <mat-autocomplete #autoServiceRequest="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                <!-- <mat-option *ngFor="let option of filteredServiceRequestValues" [value]="option">
+                  {{option.display}}
+                </mat-option> -->
+              </mat-autocomplete>
+
+            </mat-form-field>
+            <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Diagnostic Imaging Service Request"
+              [mdePopoverTriggerFor]="serviceRequestPopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+              <b>i</b>
+            </button>
+            <mde-popover #serviceRequestPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+              <mat-card style="max-width: 600px">
+                <mat-card-content>
+                  Comprehensive list of possible Diagnostic Imaging Investigations.
+
+                  Current set is limited only to subtypes of 363679005|Imaging (procedure)| within SNOMED CT.
+
+                  The options available, are filtered using any combination of any search text as well as any previously selected values from Modality, Target Site and Laterality above.
+              </mat-card-content>
+              </mat-card>
+            </mde-popover>
+
+          </div>
+          <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px" style="display: flex; align-items: flex-start;">
+            <mat-selection-list #options [multiple]="false" formControlName="selectedServiceRequest" style="border-radius: 5px; border: 1px solid lightgrey;" fxFlex>
+              <mat-list-option *ngIf="filteredServiceRequestValues.length < 1" [disabled]="true">
+                -- no suggestions --
+              </mat-list-option>
+              <mat-list-option *ngFor="let option of filteredServiceRequestValues" [value]="option" (click)="onSelectServiceRequest(option)">
+                {{option.display}}
+              </mat-list-option>
+            </mat-selection-list>
+          </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-row" fxLayout="column" fxLayout.xs="column" fxLayoutGap="0px">
+          <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Contrast Material</mat-label>
+              <input type="text" aria-label="Contrast Material" matInput formControlName="contrastMaterial" [matAutocomplete]="autoContrastMaterial">
+              <span matPrefix matTooltip="This field uses SNOMED CT" class="circle"><b>S</b></span>    
+              <mat-autocomplete #autoContrastMaterial="matAutocomplete" [displayWith]="displayFn.bind(this)">
+                <mat-option *ngFor="let option of filteredContrastMaterialValues" [value]="option">
+                  {{option.display}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Contrast Material"
+              [mdePopoverTriggerFor]="contrastMaterialPopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+              <b>i</b>
+            </button>
+            <mde-popover #contrastMaterialPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+              <mat-card style="max-width: 600px">
+                <mat-card-content>
+                  Potential options of contrast material.
+                  The search constraint is only limited to current subtypes of 385420005|Contrast media (substance)|.
+              </mat-card-content>
+              </mat-card>
+            </mde-popover>
+          </div>
+          <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+            <mat-form-field appearance="outline"  fxFlex>
+              <mat-label>Additional Notes</mat-label>
+              <input matInput formControlName="additionalNotes"/>
+            </mat-form-field>
+          </div>
+
+          <mat-card class="mat-elevation-z0">
+            <mat-card-subtitle>Extracted attributes - (Read Only)</mat-card-subtitle>
+            <mat-card-content>
+              <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px" style="padding-bottom: 1.34375em" >
+                <mat-list id="extractedModalityList" style="border-radius: 5px; border: 1px solid lightgrey;" fxFlex>
+                  <div mat-subheader>
+                    Extracted Modality
+                    <mat-spinner *ngIf="searchingExtractedModalityValues" matSuffix [diameter]="18" style="float: right; margin-left: 8px"></mat-spinner>
+                  </div>
+                  <mat-list-item *ngFor="let value of extractedModalityValues"> {{ value.display }} </mat-list-item>
+                </mat-list>
+                <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Extracted Modality"
+                  [mdePopoverTriggerFor]="extractedModalityPopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+                  <b>i</b>
+                </button>
+                <mde-popover #extractedModalityPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+                  <mat-card style="max-width: 600px">
+                    <mat-card-content>
+                      Extracted modality from the selected DI Service Request. Values provided are depended on the SNOMED CT concept model definitions, and are limited to subtypes of 360037004|Imaging - action (qualifier value)|
+                    </mat-card-content>
+                  </mat-card>
+                </mde-popover>
+              </div>
+              <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px" style="padding-bottom: 1.34375em">
+                <mat-list id="extractedSiteList" style="border-radius: 5px; border: 1px solid lightgrey;" fxFlex>
+                  <div mat-subheader>
+                    Extracted Site
+                  <mat-spinner *ngIf="searchingExtractedSiteValues" matSuffix [diameter]="18" style="float: right; margin-left: 8px"></mat-spinner>
+                  </div>
+                  <mat-list-item *ngFor="let value of extractedSiteValues"> {{ value.display }} </mat-list-item>
+                </mat-list>
+                <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Extracted Site"
+                  [mdePopoverTriggerFor]="extractedSitePopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+                  <b>i</b>
+                </button>
+                <mde-popover #extractedSitePopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+                  <mat-card style="max-width: 600px">
+                    <mat-card-content>
+                      Extracted anatomical site from the selected DI Service Request. Values provided are dependant on the SNOMED CT concept model definitions. May include laterality.
+                    </mat-card-content>
+                  </mat-card>
+                </mde-popover>
+              </div>
+              <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+                <mat-list id="extractedLateralityList" style="border-radius: 5px; border: 1px solid lightgrey;" fxFlex>
+                  <div mat-subheader>
+                    Extracted Laterality
+                    <mat-spinner *ngIf="searchingExtractedLateralityValues" matSuffix [diameter]="18" style="float: right; margin-left: 8px"></mat-spinner>
+                  </div>
+                  <mat-list-item *ngFor="let value of extractedLateralityValues"> {{ value.display }} </mat-list-item>
+                </mat-list>
+                <button mat-mini-fab aria-label="click for info" matTooltip="Click for further info on Extracted Laterality"
+                  [mdePopoverTriggerFor]="extractedLateralityPopover" mdePopoverTriggerOn="click" #popoverTrigger="mdePopoverTrigger">
+                  <b>i</b>
+                </button>
+                <mde-popover #extractedLateralityPopover="mdePopover" [mdePopoverOverlapTrigger]="false">
+                  <mat-card style="max-width: 600px">
+                    <mat-card-content>
+                      Extracted laterality values from the selected DI Service Request. Values provided are dependant on the SNOMED CT concept model definitions.
+                    </mat-card-content>
+                  </mat-card>
+                </mde-popover>
+              </div>
+    
+            </mat-card-content>
+          </mat-card>
+        </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+
+      <div class="form-row" fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px" style="padding-top: 1.34375em">
+        <button mat-raised-button (click)="onSaveDiagnosticImagingInvestigation()">
+          <mat-icon>add</mat-icon> 
+          Add 
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar><mat-icon>list</mat-icon></div>
+      <mat-card-title>Diagnostic Service Requests</mat-card-title>
+    </mat-card-header>
+    <mat-card-content fxLayout="column">
+
+      <table mat-table fxFlex [dataSource]="diagnosticImagingInvestigationDataSource" class="mat-elevation-z8" #investigationTable>
+        <ng-container matColumnDef="presentingProblemDisplay">
+          <th mat-header-cell *matHeaderCellDef> Presenting Problem </th>
+          <td mat-cell *matCellDef="let investigation" 
+            matTooltip="SNOMED CT code: {{investigation.presentingProblemCode}}"
+            matBadge="S" 
+            matBadgePosition="above before" 
+            matBadgeColor="warn"
+            matBadgeOverlap="false"
+            [matBadgeHidden]="isMatBadgeHidden(investigation.presentingProblemCode)"> {{investigation.presentingProblemDisplay}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="radiologyServiceDisplay">
+          <th mat-header-cell *matHeaderCellDef> Requested Radiology Service</th>
+          <td mat-cell *matCellDef="let investigation" 
+            matTooltip="SNOMED CT code: {{investigation.serviceRequestCode}}"
+            matBadge="S" 
+            matBadgePosition="above before" 
+            matBadgeColor="warn"
+            matBadgeOverlap="false"
+            [matBadgeHidden]="isMatBadgeHidden(investigation.serviceRequestCode)"> {{investigation.serviceRequestDisplay}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="contrastMaterialDisplay">
+          <th mat-header-cell *matHeaderCellDef> Contrast Material </th>
+          <td mat-cell *matCellDef="let investigation" 
+            matTooltip="SNOMED CT code: {{investigation.contrastMaterialCode}}"
+            matBadge="S" 
+            matBadgePosition="above before" 
+            matBadgeColor="warn"
+            matBadgeOverlap="false"
+            [matBadgeHidden]="isMatBadgeHidden(investigation.contrastMaterialCode)"> {{investigation.contrastMaterialDisplay}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="additionalNotes">
+          <th mat-header-cell *matHeaderCellDef> Additional Notes </th>
+          <td mat-cell *matCellDef="let investigation"> {{investigation.additionalNotes}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedDiagnosticImagingInvestigationsColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedDiagnosticImagingInvestigationsColumns;"></tr>
+      </table>
+  
+  
+    </mat-card-content>
+  </mat-card>
+
+</div>    

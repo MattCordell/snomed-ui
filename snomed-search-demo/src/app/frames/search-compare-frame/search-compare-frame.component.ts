@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, tap, switchMap, finalize } from 'rx
 import { ValueSet } from 'fhir-stu3';
 import { DemoModelService, SnomedConcept } from 'src/app/demo-model.service';
 import { Subscription } from 'rxjs';
-import { MatAutocompleteTrigger } from '@angular/material';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-search-compare-frame',
@@ -90,7 +90,6 @@ export class SearchCompareFrameComponent implements OnInit {
       
     this.searchTypeChangeSubscription = this.searchComparisonForm.get('searchType').valueChanges
       .subscribe(searchType => {
-        console.log("new search type is", searchType);
 
         switch (searchType) {
           case "multipleDescriptions": {
